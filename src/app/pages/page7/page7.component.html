@@ -1,0 +1,111 @@
+<div class="container" style="padding: 20px;min-height: 450px">
+  <div id="loading" *ngIf="isSubmitting"></div>
+  <form [formGroup]="form7Group" (ngSubmit)="onSubmit()">
+    <div class="row col-md-12">
+      <div class="title-bar col-md-12">
+        Conte um pouco sobre sua Profissão.
+      </div>
+    </div>
+    <!---------------------LINE1---------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row"> Empresa onde trabalha </label>
+      </div>
+      <div class="col-md-12">
+        <input class="form-control" type="text" autocomplete="off" formControlName="companyCtl" [(ngModel)]="company"
+          [ngClass]="(companyCtl.invalid && (companyCtl.dirty || companyCtl.touched || submitted))?'with-error':''">
+        <mat-error *ngIf="companyCtl.hasError('required') && (companyCtl.dirty || companyCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!companyCtl.hasError('required') && companyCtl.invalid && (companyCtl.dirty || companyCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE2--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row" for="cpf"> Comprovante de renda </label>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="proofIncome == 0 ?'select-button':''" (click)="proofIncome = 0;otherProofIncome = -1" tabindex="1">
+          {{proofIncomeArr[0] | translationPipe}}
+        </button>
+        <mat-error *ngIf="proofIncome == -1 && submitted">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="proofIncome == 1?'select-button':''" (click)="proofIncome = 1;otherProofIncome = -1" tabindex="1">
+          {{proofIncomeArr[1] | translationPipe}}
+        </button>
+      </div>
+      <div class="col-md-4">
+        <label class="custom-select">
+          <select [(ngModel)]="proofIncome" [ngModelOptions]="{standalone: true}"
+            [ngClass]="proofIncome>1?'custom-combo-selected':'custom-combo'">
+            <option selected disabled [value]="proofIncome>1?-1:proofIncome">Others
+            </option>
+            <option *ngFor="let status of otherProofIncomeArr" [value]="status.value">{{status.name | translationPipe}}
+            </option>
+          </select>
+        </label>
+      </div>
+      <input type="hidden" [(ngModel)]="proofIncome" formControlName="proofIncomeCtl">
+    </div>
+    <!----------------------LINE3-------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row"> Data de admissão </label>
+        <input class="form-control" type="text" autocomplete="off" formControlName="admissionDateCtl"
+          [(ngModel)]="admissionDate"
+          [ngClass]="(admissionDateCtl.invalid && (admissionDateCtl.dirty || admissionDateCtl.touched || submitted))?'with-error':''"
+          mask="00/00/0000" [dropSpecialCharacters]="false" type="text" autocomplete="off" placeholder="dd/mm/yyyy"
+          [showMaskTyped]="true">
+        <mat-error
+          *ngIf="admissionDateCtl.hasError('required') && (admissionDateCtl.dirty || admissionDateCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!admissionDateCtl.hasError('required') && admissionDateCtl.invalid && (admissionDateCtl.dirty || admissionDateCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row"> Telefone comercial </label>
+        <input class="form-control" type="text" autocomplete="off" formControlName="commercialPhoneCtl"
+          [(ngModel)]="commercialPhone"
+          [ngClass]="(commercialPhoneCtl.invalid && (commercialPhoneCtl.dirty || commercialPhoneCtl.touched || submitted))?'with-error':''"
+          mask="(00)000000000" [dropSpecialCharacters]="true" type="text" autocomplete="off" placeholder="(__)_________"
+          [showMaskTyped]="true">
+        <mat-error
+          *ngIf="commercialPhoneCtl.hasError('required') && (commercialPhoneCtl.dirty || commercialPhoneCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!commercialPhoneCtl.hasError('required') && commercialPhoneCtl.invalid && (commercialPhoneCtl.dirty || commercialPhoneCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!-----------------------LINE4-------------------------------->
+    <div style="padding-top:20px" class="row col-md-12">
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="button" class="full-width button-select btn-back button-color " tabindex="1"
+          (click)="onGoBack()">
+          VOLTAR
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="submit" class="full-width button-select button-color btn-continue"
+          tabindex="1">
+          CONTINUAR
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,369 @@
+<div class="container" style="padding: 20px">
+    <div id="loading" *ngIf="isSubmitting"></div>
+    <form [formGroup]="form2Group" (ngSubmit)="onSubmit()">
+        <div class="row col-md-12">
+            <div class="title-bar col-md-12">
+                Precisamos saber um pouco sobre você.
+            </div>
+        </div>
+
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row" for="cpf"> CPF </label>
+            </div>
+            <div class="col-md-12">
+                <input class="form-control" mask="000.000.000-00" [showMaskTyped]="true" [dropSpecialCharacters]="true"
+                    [ngClass]="(form2Group.get('CPFCtl').invalid && (form2Group.get('CPFCtl').dirty || form2Group.get('CPFCtl').touched || submitted))?'with-error':''"
+                    placeholder="___.___.___-__" formControlName="CPFCtl" [(ngModel)]="CPF">
+                <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+                <mat-error
+                    *ngIf="form2Group.get('CPFCtl').required && (form2Group.get('CPFCtl').dirty || form2Group.get('CPFCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('CPFCtl').required && form2Group.get('CPFCtl').invalid && (form2Group.get('CPFCtl').dirty || form2Group.get('CPFCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row">Data de nascimento</label>
+                <input mask="00/00/0000" class="form-control" [showMaskTyped]="true" [dropSpecialCharacters]="false"
+                    [(ngModel)]="dateOfBirth" placeholder="dd/mm/yyyy"
+                    [ngClass]="(form2Group.get('dateOfBirthCtl').invalid && (form2Group.get('dateOfBirthCtl').dirty || form2Group.get('dateOfBirthCtl').touched || submitted))?'with-error':''"
+                    formControlName="dateOfBirthCtl">
+                <mat-error
+                    *ngIf="!form2Group.get('dateOfBirthCtl').required && form2Group.get('dateOfBirthCtl').invalid && (form2Group.get('dateOfBirthCtl').dirty || form2Group.get('dateOfBirthCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="form2Group.get('dateOfBirthCtl').required && (form2Group.get('dateOfBirthCtl').dirty || form2Group.get('dateOfBirthCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Sua renda mensal </label>
+                <input [limitNumber]=14 currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+                    formControlName="incomeCtl" class="form-control" [(ngModel)]="income"
+                    [ngClass]="(form2Group.get('incomeCtl').invalid && (form2Group.get('incomeCtl').dirty || form2Group.get('incomeCtl').touched || submitted))?'with-error':''" />
+                <!-- <input prefix='R$' mask="00.000,00" [dropSpecialCharacters]="true" > -->
+                <mat-error
+                    *ngIf="!form2Group.get('incomeCtl').required && form2Group.get('incomeCtl').invalid && (form2Group.get('incomeCtl').dirty || form2Group.get('incomeCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="form2Group.get('incomeCtl').required && (form2Group.get('incomeCtl').dirty || form2Group.get('incomeCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row" for="cpf"> Sexo </label>
+            </div>
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="button" class="full-width button-select round-button button-color "
+                    [ngClass]="sex == 0?'select-button':''" (click)="sex = 0" tabindex="1">
+                    Feminino
+                </button>
+                <mat-error *ngIf="sex == -1 && submitted">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="button" class="full-width button-select round-button button-color "
+                    [ngClass]="sex == 1?'select-button':''" (click)="sex = 1" tabindex="1">
+                    Masculino
+                </button>
+            </div>
+            <input type="hidden" [(ngModel)]="sex" formControlName="sexCtl">
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row" for="cpf"> Estado civil </label>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="full-width button-select round-button button-color "
+                    [ngClass]="maritalStatus == 0 ?'select-button':''"
+                    (click)="maritalStatus = 0;otherMaritalStatus = -1" tabindex="1">
+                    {{maritalStatusArr[0] | translationPipe}}
+                </button>
+                <mat-error *ngIf="maritalStatus == -1 && submitted">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="full-width button-select round-button button-color "
+                    [ngClass]="maritalStatus == 1?'select-button':''"
+                    (click)="maritalStatus = 1;otherMaritalStatus = -1" tabindex="1">
+                    {{maritalStatusArr[1] | translationPipe}}
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="full-width round-button button-color "
+                    [ngClass]="maritalStatus == 2?'select-button':''"
+                    (click)="maritalStatus = 2;otherMaritalStatus = -1" tabindex="1">
+                    {{maritalStatusArr[2] | translationPipe}}
+                </button>
+            </div>
+            <div class="col-md-3">
+                <label class="custom-select">
+                    <select [(ngModel)]="maritalStatus" [ngModelOptions]="{standalone: true}"
+                        [ngClass]="maritalStatus>2?'custom-combo-selected':'custom-combo'">
+                        <option selected disabled [value]="maritalStatus>2?-1:maritalStatus">Outros
+                        </option>
+                        <option *ngFor="let status of otherMaritalStatusArr" [value]="status.value">
+                            {{status.name | translationPipe}}
+                        </option>
+                    </select>
+                </label>
+            </div>
+            <!-- <input type="hidden" [(ngModel)]="maritalStatus" formControlName="maritalStatusCtl"> -->
+        </div>
+        <!------------------------------------------------------->
+
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Ocupação </label>
+                <select class="form-control" [(ngModel)]="occupation" (ngModelChange)="selectionChange()"
+                    formControlName="occupationCtl"
+                    [ngClass]="(form2Group.get('occupationCtl').invalid && (form2Group.get('occupationCtl').dirty || form2Group.get('occupationCtl').touched))?'with-error':''">
+                    <option *ngFor="let item of occupationArr" [disabled]="item.value==0" [ngValue]="item.value">
+                        {{item.name | translationPipe}}</option>
+                </select>
+                <mat-error
+                    *ngIf="form2Group.get('occupationCtl').required && (form2Group.get('occupationCtl').dirty || form2Group.get('occupationCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('occupationCtl').required && form2Group.get('occupationCtl').invalid && (form2Group.get('occupationCtl').dirty || form2Group.get('occupationCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row">Profissão </label>
+                <select class="form-control" [(ngModel)]="profession" formControlName="professionCtl"
+                    [appDisableControl]="professionArr.length==1" [compareWith]="compareProf"
+                    [ngClass]="(form2Group.get('professionCtl').invalid && (form2Group.get('professionCtl').dirty || form2Group.get('professionCtl').touched || submitted))?'with-error':''">
+                    <option *ngFor="let item of professionArr" [disabled]="item.id==-1" [ngValue]="item">
+                        {{item.profession}}</option>
+                </select>
+                <mat-error
+                    *ngIf="form2Group.get('professionCtl').required && (form2Group.get('professionCtl').dirty || form2Group.get('professionCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('professionCtl').required && form2Group.get('professionCtl').invalid && (form2Group.get('professionCtl').dirty || form2Group.get('professionCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+
+
+        <!------------------------------------------------------->
+        <div *ngIf="false" class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Órgão </label>
+                <select class="form-control" [(ngModel)]="organ" formControlName="organCtl"
+                    [ngClass]="(form2Group.get('organCtl').invalid && (form2Group.get('organCtl').dirty || form2Group.get('organCtl').touched))?'with-error':''">
+                    <option *ngFor="let item of organArr" [disabled]="item.value==0" [ngValue]="item.value">
+                        {{item.name}}</option>
+                </select>
+                <mat-error
+                    *ngIf="form2Group.get('organCtl').required && (form2Group.get('organCtl').dirty || form2Group.get('organCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('organCtl').required && form2Group.get('organCtl').invalid && (form2Group.get('organCtl').dirty || form2Group.get('organCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf">Vínculo com o órgão </label>
+                <select class="form-control" [(ngModel)]="linkOrgan" formControlName="linkOrganCtl"
+                    [ngClass]="(form2Group.get('linkOrganCtl').invalid && (form2Group.get('linkOrganCtl').dirty || form2Group.get('linkOrganCtl').touched))?'with-error':''">
+                    <option *ngFor="let item of linkOrganArr" [disabled]="item.value==0" [ngValue]="item.value">
+                        {{item.name}}</option>
+                </select>
+                <mat-error
+                    *ngIf="form2Group.get('linkOrganCtl').required && (form2Group.get('linkOrganCtl').dirty || form2Group.get('linkOrganCtl').touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('linkOrganCtl').required && form2Group.get('linkOrganCtl').invalid && (form2Group.get('linkOrganCtl').dirty || form2Group.get('linkOrganCtl').touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <!------------------------------------------------------->
+        <div class="row col-md-12" *ngIf="false">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row" for="cpf">Número do seu benefício: </label>
+            </div>
+            <div class="col-md-12">
+
+                <input mask="000.000.000-0" [showMaskTyped]="true" [dropSpecialCharacters]="true"
+                    placeholder="___.___.___-_" formControlName="benefitNumCtl" class="form-control"
+                    [(ngModel)]="benefitNum"
+                    [ngClass]="(form2Group.get('benefitNumCtl').invalid && (form2Group.get('benefitNumCtl').dirty || form2Group.get('benefitNumCtl').touched || submitted))?'with-error':''" />
+                <mat-error
+                    *ngIf="occupationArr[occupation].name === 'SELF_EMPLOYED' && benefitNum == '' && (form2Group.get('benefitNumCtl').dirty || form2Group.get('benefitNumCtl').touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('benefitNumCtl').hasError('required') && form2Group.get('benefitNumCtl').invalid && (form2Group.get('benefitNumCtl').dirty || form2Group.get('benefitNumCtl').touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Grau de instrução </label>
+                <select class="form-control" [(ngModel)]="degree" formControlName="degreeCtl"
+                    [ngClass]="(form2Group.get('degreeCtl').invalid && (form2Group.get('degreeCtl').dirty || form2Group.get('degreeCtl').touched))?'with-error':''">
+                    <option *ngFor="let item of degreeArr" [disabled]="item==='Selecione'" [ngValue]="item">
+                        {{item | translationPipe}}</option>
+                </select>
+                <mat-error
+                    *ngIf="form2Group.get('degreeCtl').required && (form2Group.get('degreeCtl').dirty || form2Group.get('degreeCtl').touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!form2Group.get('degreeCtl').required && form2Group.get('degreeCtl').invalid && (form2Group.get('degreeCtl').dirty || form2Group.get('degreeCtl').touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row">Possui conta em banco na qual você é o titular?
+                </label>
+                <select class="form-control" [(ngModel)]="bank" formControlName="bankAccountCtl"
+                    [ngClass]="(form2Group.get('bankAccountCtl').invalid && (form2Group.get('bankAccountCtl').dirty || form2Group.get('bankAccountCtl').touched || submitted))?'with-error':''">
+                    <option *ngFor="let item of bankArr" [disabled]="item==='Selecione'" [ngValue]="item">
+                        {{item | translationPipe}}
+                    </option>
+                </select>
+                <mat-error *ngIf="form2Group.get('bankAccountCtl').invalid && (form2Group.get('bankAccountCtl').dirty || form2Group.get('bankAccountCtl').touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Com cheques? </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="doCheck == 0?'select-button':''" (click)="doCheck = 0" tabindex="1">
+                            Sim
+                        </button>
+                        <mat-error *ngIf="doCheck == -1 && submitted">
+                            <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="doCheck == 1?'select-button':''" (click)="doCheck = 1" tabindex="1">
+                            Não
+                        </button>
+                    </div>
+                    <input type="hidden" [(ngModel)]="doCheck" formControlName="doCheckCtl">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Possui restrições em seu nome? </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="hasRestrictions == 0?'select-button':''" (click)="hasRestrictions = 0"
+                            tabindex="1">
+                            Sim
+                        </button>
+                        <mat-error *ngIf="hasRestrictions == -1 && submitted">
+                            <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="hasRestrictions == 1?'select-button':''" (click)="hasRestrictions = 1"
+                            tabindex="1">
+                            Não
+                        </button>
+                    </div>
+                    <input type="hidden" [(ngModel)]="hasRestrictions" formControlName="hasRestrictionsCtl">
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Possui imóvel próprio? </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="ownProperty == 0?'select-button':''" (click)="ownProperty = 0" tabindex="1">
+                            Sim
+                        </button>
+                        <mat-error *ngIf="ownProperty == -1 && submitted">
+                            <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="ownProperty == 1?'select-button':''" (click)="ownProperty = 1" tabindex="1">
+                            Não
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" [(ngModel)]="ownProperty" formControlName="ownPropertyCtl">
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Possui automóvel próprio? </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="ownCar == 0?'select-button':''" (click)="ownCar = 0" tabindex="1">
+                            Sim
+                        </button>
+                        <mat-error *ngIf="ownCar == -1 && submitted">
+                            <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="full-width button-select round-button button-color "
+                            [ngClass]="ownCar == 1?'select-button':''" (click)="ownCar = 1" tabindex="1">
+                            Não
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" [(ngModel)]="ownCar" formControlName="ownCarCtl">
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div style="padding-top:20px" class="row col-md-12">
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="button" class="full-width button-select btn-back button-color "
+                    tabindex="1" (click)="onGoBack()">
+                    VOLTAR
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="submit" class="full-width button-select button-color btn-continue"
+                    tabindex="1">
+                    CONTINUAR
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

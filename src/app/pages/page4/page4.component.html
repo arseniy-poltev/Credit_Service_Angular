@@ -1,0 +1,14 @@
+<div class="container" style="padding: 20px;min-height: 450px">
+    <div class="col-sm-8 col-xs-12 title-bar">
+        {{_DataManagementService.userName}}, obrigado pelas infomacoes.
+    </div>
+    <b>
+        Estamos buscando as instituições financeiras interessadas no seu empréstimo.
+    </b>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="progress" aria-valuemin="0"
+            aria-valuemax="100" [ngStyle]="{'width.%': progress}">
+            {{progress}}%
+        </div>
+    </div>
+</div>

@@ -1,0 +1,181 @@
+<div class="page1">
+      <div id="loading" *ngIf="isSubmitting"></div>
+      <form [formGroup]="form1Group" (ngSubmit)="submit()">
+            <div>
+                  <b class="form-title" style="color:#394444;">De quanto você precisa?</b>
+                  <div class="btn-group col-sm-12"
+                        style="padding-left: 0 !important; padding-right: 0 !important; display: flex;padding-bottom:15px">
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              tabindex="1" (click)="selectAmount('2000')"
+                              [ngClass]="amountOptions[0]?'select-button':''" *ngIf="!amountOptions[4]">
+                              <span style="font-size:smaller;">R$</span>2.000
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectAmount('3000')" [ngClass]="amountOptions[1]?'select-button':''"
+                              *ngIf="!amountOptions[4]">
+                              <span style="font-size:smaller;">R$</span>3.000
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectAmount('5000')" [ngClass]="amountOptions[2]?'select-button':''"
+                              *ngIf="!amountOptions[4]">
+                              <span style="font-size:smaller;">R$</span>5.000
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectAmount('10000')" [ngClass]="amountOptions[3]?'select-button':''"
+                              *ngIf="!amountOptions[4]">
+                              <span style="font-size:smaller;">R$</span>10.000
+                        </button>
+
+                        <div *ngIf="amountOptions[4]" class="input-group col-md-9" style="margin-right: 2%;">
+                              <!-- <span class="input-group-addon">R$</span> -->
+                              <!-- <input name="amount" id="amount" formControlName="amountCtl" [(ngModel)]="amount"
+                                    style="float: inherit;text-align: right; margin: 0px !important; height: 40px;"
+                                    type="number" class="form-control" tabindex="6"> -->
+
+                              <select name="term" id="term" class="form-control" [(ngModel)]="amount"
+                                    [ngModelOptions]="{standalone: true}"
+                                    style="margin-bottom: 0px; height: 40px; margin-right: 2%;" required="required"
+                                    tabindex="12">
+                                    <option value="0"></option>
+                                    <option *ngFor="let item of amountComboArr" [ngValue]="item">
+                                          {{item}}
+                                    </option>
+                              </select>
+                              <!-- <span class="input-group-addon">,00</span> -->
+                              <br>
+                        </div>
+                        <button id="btnTwoThousand" type="button" class="col-md-3 round-button button-color "
+                              (click)="selectAmount('otherValue')" [ngClass]="amountOptions[4]?'select-button':''">
+                              Outro valor
+                        </button>
+                        <input type="hidden" [(ngModel)]="amount" formControlName="amountCtl">
+                  </div>
+                  <div>
+                        <mat-error
+                              *ngIf="(amount == -1 && !startUp) || (form1Group.get('amountCtl').hasError('required') && (form1Group.get('amountCtl').dirty || form1Group.get('amountCtl').touched))">
+                              <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                        <div *ngIf="amountMinCase">
+                              <mat-error
+                                    *ngIf="(form1Group.get('amountCtl').hasError('min')) && (form1Group.get('amountCtl').dirty || form1Group.get('amountCtl').touched || submitted)">
+                                    <strong>Valor não pode ser inferior a R $ 100,00</strong>
+                              </mat-error>
+                        </div>
+                  </div>
+            </div>
+
+            <div style="padding-top: 10px">
+                  <b class="form-title" style="color:#394444;">Em quantas vezes você quer pagar?</b>
+                  <div class="btn-group col-sm-12"
+                        style="padding-left: 0 !important; padding-right: 0 !important; display: flex;padding-bottom:15px">
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectPeriod('9')" tabindex="1" [ngClass]="periodOptions[0]?'select-button':''"
+                              *ngIf="!periodOptions[4]">
+                              9
+                              <span style="font-size:smaller;">x</span>
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectPeriod('12')" tabindex="1" [ngClass]="periodOptions[1]?'select-button':''"
+                              *ngIf="!periodOptions[4]">
+                              12
+                              <span style="font-size:smaller;">x</span>
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectPeriod('18')" tabindex="1" [ngClass]="periodOptions[2]?'select-button':''"
+                              *ngIf="!periodOptions[4]">
+                              18
+                              <span style="font-size:smaller;">x</span>
+                        </button>
+                        <button id="btnTwoThousand" type="button" class="col-md-2 round-button button-color "
+                              (click)="selectPeriod('24')" tabindex="1" [ngClass]="periodOptions[3]?'select-button':''"
+                              *ngIf="!periodOptions[4]">
+                              24
+                              <span style="font-size:smaller;">x</span>
+                        </button>
+                        <div *ngIf="periodOptions[4]" class="input-group col-md-9" style="margin-right: 2%;">
+                              <select ng-show="showInstallmentOtherValue" name="term" id="term" class="form-control"
+                                    [(ngModel)]="period" [ngModelOptions]="{standalone: true}"
+                                    style="margin-bottom: 0px; height: 40px; margin-right: 2%;" required="required"
+                                    tabindex="12">
+                                    <option value="0"></option>
+                                    <option *ngFor="let item of periodComboArr" [ngValue]="item">
+                                          {{item}} meses
+                                    </option>
+                              </select>
+                              <br>
+                        </div>
+                        <button id="btnTwoThousand" type="button" class="col-md-3 round-button button-color "
+                              [ngClass]="periodOptions[4]?'select-button':''" (click)="selectPeriod('otherValue')"
+                              tabindex=" 1" style="font-size: small;">
+                              Outro prazo
+                        </button>
+                        <input type="hidden" [(ngModel)]="period" formControlName="periodCtl">
+                  </div>
+                  <div>
+                        <mat-error *ngIf="periodRequired">
+                              <strong>Campo é obrigatório</strong>
+                        </mat-error>
+                  </div>
+            </div>
+
+            <div style="padding-top: 10px">
+                  <b class="form-title" style="color:#394444;">Nome Completo</b>
+                  <div class="btn-group col-sm-12"
+                        style="padding-left: 0 !important; padding-right: 0 !important; display: flex;">
+                        <mat-form-field class="example-full-width" style="width:100%">
+                              <input matInput placeholder="Nome Completo" formControlName="usernameCtl"
+                                    [(ngModel)]="fullName" [errorStateMatcher]="matcher">
+                              <mat-error
+                                    *ngIf="form1Group.get('usernameCtl').hasError('validUsername') && !form1Group.get('usernameCtl').hasError('required')">
+                                    <strong>Valor do Campo incorreto</strong>
+                              </mat-error>
+                              <mat-error *ngIf="form1Group.get('usernameCtl').hasError('required') && submitted">
+                                    <strong>Campo é obrigatório</strong>
+                              </mat-error>
+                        </mat-form-field>
+                  </div>
+            </div>
+
+            <div style="padding-top: 10px">
+                  <b class="form-title" style="color:#394444;">Email</b>
+                  <div class="btn-group col-sm-12"
+                        style="padding-left: 0 !important; padding-right: 0 !important; display: flex;">
+                        <mat-form-field class="example-full-width" style="width:100%">
+                              <input matInput placeholder="Email" formControlName="emailCtl" [(ngModel)]="email"
+                                    [errorStateMatcher]="matcher">
+                              <mat-error
+                                    *ngIf="form1Group.get('emailCtl').hasError('email') && !form1Group.get('emailCtl').hasError('required')">
+                                    <strong>Valor do Campo incorreto</strong>
+                              </mat-error>
+                              <mat-error *ngIf="form1Group.get('emailCtl').hasError('required') && submitted">
+                                    <strong>Campo é obrigatório</strong>
+                              </mat-error>
+                        </mat-form-field>
+                  </div>
+            </div>
+
+            <div style="padding-left: 5px;">
+                  <label style="font-weight: normal; line-height: 12px; font-size:small;">
+                        <mat-checkbox [(ngModel)]="terms" formControlName="termsCtl" class="example-margin">Aceito
+                              receber do Acordo Certo mensagens de email e SMS.</mat-checkbox>
+                  </label>
+                  <mat-error
+                        *ngIf="form1Group.get('termsCtl').hasError('validTerms') && (form1Group.get('termsCtl').dirty || form1Group.get('termsCtl').touched || submitted)">
+                        <strong>Aceitação do termo é obrigatória</strong>
+                  </mat-error>
+            </div>
+            <div style="padding-top: 20px">
+                  <button mat-flat-button color="primary" type="submit"
+                        style="width:100%;display: block;margin-left: auto;margin-right: auto;">
+                        <span class="next-button">CONTINUAR</span>
+                  </button>
+            </div>
+
+            <p style="text-align:center; margin-top:0.4em; font-size:small;">
+                  <b>Tudo online com total sigilo e segurança.
+                  </b>
+                  <br>
+                  <b>Sem nenhum custo.</b>
+            </p>
+      </form>
+</div>

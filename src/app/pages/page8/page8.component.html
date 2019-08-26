@@ -1,0 +1,212 @@
+<div class="container" style="padding: 20px">
+  <div id="loading" *ngIf="isSubmitting"></div>
+  <form [formGroup]="form8Group" (ngSubmit)="onSubmit()">
+    <div class="row col-md-12">
+      <div class="title-bar col-md-12">
+        Agora fale sobre o seu imóvel e veículo.
+      </div>
+    </div>
+    <!---------------------LINE1---------------------------------->
+    <div *ngIf="youOwnProperty">
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row" style="font-size:22px"> Dados do imóvel </label>
+        </div>
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> Qual o valor do seu imóvel? </label>
+        </div>
+        <div class="col-md-12">
+          <!-- <input class="form-control" type="text" autocomplete="off" formControlName="propertyValueCtl"
+                [(ngModel)]="propertyValue"
+                [ngClass]="(propertyValueCtl.invalid && (propertyValueCtl.dirty || propertyValueCtl.touched || submitted))?'with-error':''"> -->
+
+          <input [limitNumber]=14 currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+            formControlName="propertyValueCtl" class="form-control" [(ngModel)]="propertyValue"
+            [ngClass]="(propertyValueCtl.invalid && (propertyValueCtl.dirty || propertyValueCtl.touched || submitted))?'with-error':''">
+
+          <mat-error
+            *ngIf="propertyValueCtl.invalid && (propertyValueCtl.dirty || propertyValueCtl.touched || submitted)">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+      </div>
+      <!----------------------LINE2--------------------------------->
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> Seu imóvel está financiado? </label>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isFinanced == 0?'select-button':''" (click)="isFinanced = 0;useRealEstate=1" tabindex="1">
+            Sim
+          </button>
+          <mat-error *ngIf="isFinanced == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isFinanced == 1?'select-button':''" (click)="isFinanced = 1;useRealEstate=isPropertyOkay" tabindex="1">
+            Não
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="isFinanced" formControlName="isFinancedCtl">
+      </div>
+      <!----------------------LINE3--------------------------------->
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> A documentação do imóvel está ok? </label>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isPropertyOkay == 0?'select-button':''" (click)="isPropertyOkay = 0;useRealEstate=1-isFinanced" tabindex="1">
+            Sim
+          </button>
+          <mat-error *ngIf="isPropertyOkay == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isPropertyOkay == 1?'select-button':''" (click)="isPropertyOkay = 1;useRealEstate=1" tabindex="1">
+            Não
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="isPropertyOkay" formControlName="isPropertyOkayCtl">
+      </div>
+      <!----------------------LINE3-1--------------------------------->
+      <div class="row col-md-12" *ngIf="isFinanced == 1 && isPropertyOkay == 0">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> Avaliar imovel como garantia sem compromisso</label>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="useRealEstate == 0?'select-button':''" (click)="useRealEstate = 0" tabindex="1">
+            Sim
+          </button>
+          <mat-error *ngIf="useRealEstate == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="useRealEstate == 1?'select-button':''" (click)="useRealEstate = 1" tabindex="1">
+            Não
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="useRealEstate" formControlName="useRealEstateCtl">
+      </div>
+    </div>
+    <div *ngIf="youOwnCar">
+      <!----------------------LINE4-------------------------------->
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row" style="font-size:22px"> Dados do veículo </label>
+        </div>
+        <div class="col-md-6">
+          <label class="gray font-sm simple-row"> Ano </label>
+          <select class="form-control" [(ngModel)]="yearOfVehicle" (ngModelChange)="yearOrBrandChanged()"
+            formControlName="yearOfVehicleCtl"
+            [ngClass]="yearOfVehicleCtl.invalid && (yearOfVehicleCtl.dirty || yearOfVehicleCtl.touched || submitted)?'with-error':''">
+            <option *ngFor="let item of yearOfVehicleArr" [disabled]="item==='Selecione'" [ngValue]="item">
+              {{item}}</option>
+          </select>
+          <mat-error
+            *ngIf="yearOfVehicleCtl.invalid && (yearOfVehicleCtl.dirty || yearOfVehicleCtl.touched || submitted)">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+
+        <div class="col-md-6">
+          <label class="gray font-sm simple-row">Marca </label>
+          <select class="form-control" [(ngModel)]="brandOfVehicle" formControlName="brandOfVehicleCtl"
+            (ngModelChange)="yearOrBrandChanged()" [compareWith]="compareBrand"
+            [ngClass]="(brandOfVehicleCtl.invalid && submitted) ?'with-error':''">
+            <option *ngFor="let item of brandOfVehicleArr" [disabled]="item.brand==='Selecione'" [ngValue]="item">
+              {{item.brand}}</option>
+          </select>
+          <mat-error *ngIf="brandOfVehicleCtl.invalid && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+      </div>
+      <!----------------------LINE5--------------------------------->
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row">Qual o modelo do seu veículo?</label>
+          <select class="form-control" [(ngModel)]="modelOfVehicle" formControlName="modelOfVehicleCtl"
+            [appDisableControl]="modelOfVehicleArr.length == 1" [compareWith]="compareVehicle"
+            [ngClass]="(modelOfVehicleCtl.invalid && submitted)?'with-error':''">
+            <option *ngFor="let item of modelOfVehicleArr" [disabled]="item.name==='Selecione'" [ngValue]="item">
+              {{item.name}}
+            </option>
+          </select>
+          <mat-error *ngIf="modelOfVehicleCtl.invalid && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+      </div>
+      <!----------------------LINE6--------------------------------->
+      <div class="row col-md-12">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> Seu veículo está financiado? </label>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isVehicleFunded == 0?'select-button':''" (click)="isVehicleFunded = 0;useVehicle=1" tabindex="1">
+            Sim
+          </button>
+          <mat-error *ngIf="isVehicleFunded == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="isVehicleFunded == 1?'select-button':''" (click)="isVehicleFunded = 1;useVehicle=0" tabindex="1">
+            Não
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="isVehicleFunded" formControlName="isVehicleFundedCtl">
+      </div>
+
+      <div class="row col-md-12" *ngIf="isVehicleFunded == 1">
+        <div class="col-md-12">
+          <label class="gray font-sm simple-row"> Avaliar imovel como garantia sem compromisso </label>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="useVehicle == 0?'select-button':''" (click)="useVehicle = 0" tabindex="1">
+            Sim
+          </button>
+          <mat-error *ngIf="useVehicle == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="useVehicle == 1?'select-button':''" (click)="useVehicle = 1" tabindex="1">
+            Não
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="useVehicle" formControlName="useVehicleCtl">
+      </div>
+      <!-----------------------LINE7-------------------------------->
+    </div>
+
+
+    <div style="padding-top:20px" class="row col-md-12">
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="button" class="full-width button-select btn-back button-color " tabindex="1"
+          (click)="onGoBack()">
+          VOLTAR
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="submit" class="full-width button-select button-color btn-continue"
+          tabindex="1">
+          CONTINUAR
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

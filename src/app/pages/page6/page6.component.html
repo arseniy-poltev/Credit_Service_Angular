@@ -1,0 +1,267 @@
+<div class="container" style="padding: 20px">
+  <div id="loading" *ngIf="isSubmitting"></div>
+  <form [formGroup]="form6Group" (ngSubmit)="onSubmit()">
+    <div class="row col-md-12">
+      <div class="title-bar col-md-12">
+        Complete suas informações pessoais.
+      </div>
+    </div>
+    <!---------------------LINE1---------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row"> Email informado </label>
+      </div>
+      <div class="col-md-12">
+        <input class="form-control" type="email" autocomplete="off" formControlName="emailCtl" [(ngModel)]="email"
+          [ngClass]="(emailCtl.invalid && (emailCtl.dirty || emailCtl.touched || submitted))?'with-error':''">
+        <mat-error *ngIf="emailCtl.hasError('required') && (emailCtl.dirty || emailCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!emailCtl.hasError('required') && emailCtl.hasError('email') && (emailCtl.dirty || emailCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto </strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE2--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row"> Qual sua nacionalidade? </label>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="nationality == 0?'select-button':''" (click)="nationality = 0" tabindex="1">
+          Brasileira
+        </button>
+        <mat-error *ngIf="nationality == -1 && submitted">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-6">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="nationality == 1?'select-button':''" (click)="nationality = 1" tabindex="1">
+          Estrangeira
+        </button>
+      </div>
+      <input type="hidden" [(ngModel)]="nationality" formControlName="nationalityCtl"
+        (ngModelChange)="nationalityChanged()">
+    </div>
+    <!----------------------show when natinality is Brazil-------------------------------->
+    <div class="row col-md-12" *ngIf="nationality == 0">
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row">Em qual estado voce nasceu</label>
+        <select class="form-control" [(ngModel)]="state" formControlName="stateCtl"
+          [appDisableControl]="stateArr.length==1" (ngModelChange)="stateChanged()"
+          [ngClass]="(nationality==0 && stateCtl.invalid && (stateCtl.dirty || stateCtl.touched || submitted))?'with-error':''">
+          <option *ngFor="let item of stateArr" [ngValue]="item" [disabled]="item==='Selecione'">
+            {{item}}
+          </option>
+        </select>
+        <mat-error *ngIf="nationality==0 && stateCtl.invalid && (stateCtl.dirty || stateCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row">Em qual cidade voce nasceu</label>
+        <select class="form-control" [(ngModel)]="city" formControlName="cityCtl"
+          [appDisableControl]="cityArr.length==1" [compareWith]="compareCity"
+          [ngClass]="(city.cityName === 'Selecione' && (cityCtl.dirty || cityCtl.touched || submitted))?'with-error':''">
+          <option *ngFor="let item of cityArr" [ngValue]="item" [disabled]="item.cityName==='Selecione'">
+            {{item.cityName}}
+          </option>
+        </select>
+        <mat-error
+          *ngIf="nationality==0 && city.cityName === 'Selecione' && (cityCtl.dirty || cityCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------------------------------------------->
+    <!----------------------LINE3-------------------------------->
+    <div class="row col-md-12" *ngIf="nationality == 1">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row"> Qual seu país de nascimento? </label>
+      </div>
+      <div class="col-md-12">
+        <input class="form-control" type="text" autocomplete="off" formControlName="countryBirthCtl"
+          [(ngModel)]="countryBirth"
+          [ngClass]="countryBirth === '' && natinality == 1 && (countryBirthCtl.dirty || countryBirthCtl.touched || submitted)?'with-error':''">
+        <mat-error *ngIf="countryBirth === '' && natinality == 1 && (countryBirthCtl.dirty || countryBirthCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE4--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row">Qual tipo de identidade?</label>
+        <select class="form-control" [(ngModel)]="identity" formControlName="identityCtl"
+          [appDisableControl]="identityArr.length==1"
+          [ngClass]="(identityCtl.invalid && (identityCtl.dirty || identityCtl.touched || submitted))?'with-error':''">
+          <option *ngFor="let item of identityArr" [disabled]="item==='Selecione'" [ngValue]="item">
+            {{item | translationPipe}}
+          </option>
+        </select>
+        <mat-error *ngIf="identityCtl.invalid && (identityCtl.dirty || identityCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+      <div [ngClass]="identity==='CNH'?'col-md-3':'col-md-6'">
+        <label class="gray font-sm simple-row">Data de emissão </label>
+        <input class="form-control" mask="00/00/0000" [showMaskTyped]="true" [(ngModel)]="issueDate"
+          formControlName="issudeDateCtl" [dropSpecialCharacters]="false" placeholder="dd/mm/yyyy"
+          [ngClass]="(issudeDateCtl.invalid && (issudeDateCtl.dirty || issudeDateCtl.touched || submitted))?'with-error':''">
+        <mat-error
+          *ngIf="issudeDateCtl.hasError('required') && (issudeDateCtl.dirty || issudeDateCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!issudeDateCtl.hasError('required') && issudeDateCtl.hasError('pattern') && (issudeDateCtl.dirty || issudeDateCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-3" *ngIf="identity==='CNH'">
+        <label class="gray font-sm simple-row">Data de validade </label>
+        <input class="form-control" mask="00/00/0000" [showMaskTyped]="true" [(ngModel)]="validateDate"
+          [dropSpecialCharacters]="false" formControlName="validateDateCtl" placeholder="dd/mm/yyyy"
+          [ngClass]="(validateDateCtl.invalid && (validateDateCtl.dirty || validateDateCtl.touched || submitted))?'with-error':''">
+        <mat-error
+          *ngIf="validateDateCtl.hasError('required') && (validateDateCtl.dirty || validateDateCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!validateDateCtl.hasError('required') && validateDateCtl.hasError('pattern') && (validateDateCtl.dirty || validateDateCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE5--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Número da sua identidade: </label>
+      </div>
+      <div class="col-md-12">
+        <input class="form-control" type="text" autocomplete="off" formControlName="identityNumCtl" mask="00000000-0"
+          [(ngModel)]="identityNum" [dropSpecialCharacters]="false"
+          [ngClass]="identityNumCtl.invalid && (identityNumCtl.dirty || identityNumCtl.touched || submitted) ? 'with-error' : ''">
+        <mat-error *ngIf="identityNumCtl.hasError('required') && (identityNumCtl.dirty || identityNumCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!identityNumCtl.hasError('required') && identityNumCtl.invalid && (identityNumCtl.dirty || identityNumCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!---------------------LINE6---------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row">Orgão emissor </label>
+        <select class="form-control" [(ngModel)]="issuingBody" formControlName="issuingBodyCtl"
+          [ngClass]="issuingBodyCtl.invalid && (issuingBodyCtl.dirty || issuingBodyCtl.touched || submitted) ? 'with-error':''">
+          <option *ngFor="let item of issuingBodyArr" [disabled]="item=='Selecione'" [ngValue]="item">
+            {{item | translationPipe}}</option>
+        </select>
+        <mat-error *ngIf="issuingBodyCtl.invalid && (issuingBodyCtl.dirty || issuingBodyCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+
+      <div class="col-md-6">
+        <label class="gray font-sm simple-row">UF emissor da identidade </label>
+        <select class="form-control" [(ngModel)]="issuingUF" formControlName="issuingUFCtl"
+          [ngClass]="issuingUFCtl.invalid && (issuingUFCtl.dirty || issuingUFCtl.touched || submitted) ?'with-error':''">
+          <option *ngFor="let item of stateArr" [disabled]="item=='Selecione'" [ngValue]="item">
+            {{item}}</option>
+        </select>
+        <mat-error *ngIf="issuingUFCtl.invalid && (issuingUFCtl.dirty || issuingUFCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+
+    <!----------------------LINE7--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Nome completo da sua mãe </label>
+      </div>
+      <div class="col-md-12">
+        <input class="form-control" type="text" formControlName="motherNameCtl" [(ngModel)]="motherName"
+          [ngClass]="motherNameCtl.invalid && (motherNameCtl.dirty || motherNameCtl.touched || submitted) ? 'with-error' : ''">
+        <mat-error *ngIf="motherNameCtl.hasError('required') && (motherNameCtl.dirty || motherNameCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!motherNameCtl.hasError('required') && motherNameCtl.invalid && (motherNameCtl.dirty || motherNameCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!--------------------LINE8----------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row" for="cpf"> Tipo de residência </label>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="residence == 0 ?'select-button':''" (click)="residence = 0;otherResidence = -1" tabindex="1">
+          {{residenceArr[0] | translationPipe}}
+        </button>
+        <mat-error *ngIf="residence == -1 && submitted">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="full-width button-select round-button button-color "
+          [ngClass]="residence == 1?'select-button':''" (click)="residence = 1;otherResidence = -1" tabindex="1">
+          {{residenceArr[1] | translationPipe}}
+        </button>
+      </div>
+      <div class="col-md-4">
+        <label class="custom-select">
+          <select [(ngModel)]="residence" [ngModelOptions]="{standalone: true}"
+            [ngClass]="residence>1?'custom-combo-selected':'custom-combo'">
+            <option selected disabled [value]="residence>1?-1:residence">Others
+            </option>
+            <option *ngFor="let status of otherResidenceArr" [value]="status.value">{{status.name | translationPipe}}
+            </option>
+          </select>
+        </label>
+      </div>
+      <input type="hidden" [(ngModel)]="residence" formControlName="residenceCtl">
+    </div>
+    <!---------------------LINE9---------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Reside no endereço atual desde</label>
+      </div>
+      <div class="col-md-6">
+        <input class="form-control" mask="00/00/0000" [showMaskTyped]="true" [(ngModel)]="addrSince"
+          [dropSpecialCharacters]="false" formControlName="addrSinceCtl" placeholder="dd/mm/yyyy"
+          [ngClass]="(addrSinceCtl.invalid && (addrSinceCtl.dirty || addrSinceCtl.touched || submitted))?'with-error':''">
+        <mat-error
+          *ngIf="addrSinceCtl.hasError('required') && (addrSinceCtl.dirty || addrSinceCtl.touched || submitted)">
+          <strong>Campo é obrigatório</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="!addrSinceCtl.hasError('required') && addrSinceCtl.hasError('pattern') && (addrSinceCtl.dirty || addrSinceCtl.touched || submitted)">
+          <strong>Valor do Campo incorreto</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!-----------------------LINE10-------------------------------->
+
+    <div style="padding-top:20px" class="row col-md-12">
+      <div class="col-md-6">
+        <button type="button" class="full-width button-select btn-back button-color " tabindex="1" (click)="onGoBack()">
+          VOLTAR
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button type="submit" class="full-width button-select button-color btn-continue" tabindex="1">
+          CONTINUAR
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,214 @@
+<div class="container" style="padding: 20px">
+    <div id="loading" *ngIf="isSubmitting"></div>
+    <form [formGroup]="form3Group" (ngSubmit)="onSubmit()">
+        <div class="row col-md-12">
+            <div class="title-bar col-md-12">
+                Olá {{_APICallService.quoteRequest.person.fullName}}, precisamos saber um pouco sobre você.
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row"> CEP </label>
+            </div>
+            <div class="col-md-12">
+                <input class="form-control" mask="00000-000" [showMaskTyped]="true" [dropSpecialCharacters]="true"
+                    [(ngModel)]="zipCode"
+                    [ngClass]="(zipCodeCtl.invalid && (zipCodeCtl.dirty || zipCodeCtl.touched || submitted))?'with-error':''"
+                    (ngModelChange)="CEPChanged()" placeholder="_____-___" formControlName="zipCodeCtl">
+                <mat-error *ngIf="zipCodeCtl.hasError('required') && (zipCodeCtl.dirty || zipCodeCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!zipCodeCtl.hasError('required') && zipCodeCtl.invalid && (zipCodeCtl.dirty || zipCodeCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-9">
+                <label class="gray font-sm simple-row"> Rua </label>
+                <input class="form-control" placeholder="Informe o CEP" formControlName="streetCtl" [(ngModel)]="street"
+                    [ngClass]="(streetCtl.invalid && (streetCtl.dirty || streetCtl.touched || submitted))?'with-error':''">
+                <mat-error *ngIf="streetCtl.hasError('required') && (streetCtl.dirty || streetCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!streetCtl.hasError('required') && streetCtl.invalid && (streetCtl.dirty || streetCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-3">
+                <label class="gray font-sm simple-row"> Número </label>
+                <input class="form-control" formControlName="numberCtl" [(ngModel)]="number"
+                    [ngClass]="(numberCtl.invalid && (numberCtl.dirty || numberCtl.touched || submitted))?'with-error':''">
+                <mat-error *ngIf="numberCtl.hasError('required') && (numberCtl.dirty || numberCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!numberCtl.hasError('required') && numberCtl.invalid && (numberCtl.dirty || numberCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Complemento </label>
+                <input class="form-control" formControlName="complementCtl" [(ngModel)]="complement"
+                    [ngClass]="(complementCtl.invalid && (complementCtl.dirty || complementCtl.touched || submitted))?'with-error':''">
+                <mat-error
+                    *ngIf="complementCtl.hasError('required') && (complementCtl.dirty || complementCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!complementCtl.hasError('required') && complementCtl.invalid && (complementCtl.dirty || complementCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Bairro </label>
+                <input class="form-control" formControlName="neighborhoodCtl" [(ngModel)]="neighborhood"
+                    [ngClass]="(neighborhoodCtl.invalid && (neighborhoodCtl.dirty || neighborhoodCtl.touched || submitted))?'with-error':''">
+                <mat-error
+                    *ngIf="neighborhoodCtl.hasError('required') && (neighborhoodCtl.dirty || neighborhoodCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!neighborhoodCtl.hasError('required') && neighborhoodCtl.invalid && (neighborhoodCtl.dirty || neighborhoodCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-9">
+                <label class="gray font-sm simple-row"> Cidade </label>
+                <!-- <mat-label>Outline form field</mat-label> -->
+                <input class="form-control" placeholder="Informe o CEP" [(ngModel)]="city" formControlName="cityCtl">
+                <!-- <mat-hint>Hint</mat-hint> -->
+            </div>
+            <div class="col-md-3">
+                <label class="gray font-sm simple-row"> Estado </label>
+                <select class="form-control light-gray ng-pristine ng-valid ng-touched" formControlName="stateCtl"
+                    [(ngModel)]="state">
+                    <option _ngcontent-c3="" class="light-gray" disabled="" value="">Informe o CEP</option>
+                    <option class="light-gray" disabled="" value="">Informe o CEP</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AP">AP</option>
+                    <option value="AM">AM</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MT">MT</option>
+                    <option value="MS">MS</option>
+                    <option value="MG">MG</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PR">PR</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RS">RS</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="SC">SC</option>
+                    <option value="SP">SP</option>
+                    <option value="SE">SE</option>
+                    <option value="TO">TO</option>
+                </select>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row"> Telefone celular </label>
+                <input class="form-control" mask="(00)000000000" [showMaskTyped]="true" [dropSpecialCharacters]="true"
+                    placeholder="(__)_________" formControlName="cellPhoneCtl" [(ngModel)]="cellPhone"
+                    [ngClass]="(cellPhoneCtl.invalid && (cellPhoneCtl.dirty || cellPhoneCtl.touched || submitted))?'with-error':''">
+                <mat-error *ngIf="cellPhoneCtl.hasError('required') && (cellPhoneCtl.dirty || cellPhoneCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error
+                    *ngIf="!cellPhoneCtl.hasError('required') && cellPhoneCtl.invalid && (cellPhoneCtl.dirty || cellPhoneCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+            <div class="col-md-6">
+                <label class="gray font-sm simple-row" for="cpf"> Outro telefone (opcional) </label>
+                <input class="form-control" mask="(00)000000000" [showMaskTyped]="true" [dropSpecialCharacters]="true"
+                    placeholder="(__)_________" formControlName="otherPhoneCtl" [(ngModel)]="otherPhone"
+                    [ngClass]="(otherPhoneCtl.invalid && (otherPhoneCtl.dirty || otherPhoneCtl.touched || submitted))?'with-error':''">
+                <mat-error *ngIf="otherPhoneCtl.invalid && (otherPhoneCtl.dirty || otherPhoneCtl.touched || submitted)">
+                    <strong>Valor obrigatório</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label class="gray font-sm simple-row">Qual a finalidade do empréstimo?</label>
+                <select class="form-control" [(ngModel)]="loanReason" formControlName="loanReasonCtl"
+                    [appDisableControl]="loanReasonArr.length==1"
+                    [ngClass]="(loanReasonCtl.invalid && (loanReasonCtl.dirty || loanReasonCtl.touched || submitted))?'with-error':''">
+                    <option *ngFor="let item of loanReasonArr" [disabled]="item==='Selecione'" [ngValue]="item">
+                        {{item | translationPipe}}
+                    </option>
+                </select>
+                <mat-error *ngIf="loanReasonCtl.required && (loanReasonCtl.dirty || loanReasonCtl.touched || submitted)">
+                    <strong>Campo é obrigatório</strong>
+                </mat-error>
+                <mat-error *ngIf="!loanReasonCtl.required && loanReasonCtl.invalid && (loanReasonCtl.dirty || loanReasonCtl.touched || submitted)">
+                    <strong>Valor do Campo incorreto</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12" *ngIf="!cellPhoneCtl.invalid">
+            <div class="col-md-12">
+                <label style="font-weight: normal; line-height: 12px; font-size:small;">
+                    <mat-checkbox [(ngModel)]="whatsAppTerms" formControlName="whatsAppTermsCtl" class="example-margin">
+                        Quero receber atualizações por WhatsApp
+                    </mat-checkbox>
+                </label>
+            </div>
+        </div>
+
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <label style="font-weight: normal; line-height: 12px; font-size:small;">
+                    <mat-checkbox [(ngModel)]="terms" formControlName="termsCtl" class="example-margin">Declaro que
+                        concordo com o Termo de Uso e a Política de Privacidade
+                    </mat-checkbox>
+                </label>
+            </div>
+            <div class="col-md-12">
+                <mat-error *ngIf="termsCtl.invalid && (termsCtl.dirty || termsCtl.touched || submitted)">
+                    <strong>Aceitação do termo é obrigatória</strong>
+                </mat-error>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+        <div class="row col-md-12" style="padding-top:20px">
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="button" class="full-width button-select btn-back button-color "
+                    tabindex="1" (click)="onGoBack()">
+                    VOLTAR
+                </button>
+            </div>
+            <div class="col-md-6">
+                <button id="btnTwoThousand" type="submit" class="full-width button-select button-color btn-continue"
+                    tabindex="1">
+                    CONTINUAR
+                </button>
+            </div>
+        </div>
+        <!------------------------------------------------------->
+    </form>
+</div>

@@ -1,0 +1,141 @@
+<div class="container" style="padding: 20px">
+  <!-- <div class="loading">
+    <mat-spinner></mat-spinner>
+  </div> -->
+  <div id="loading" *ngIf="isSubmitting"></div>
+  <form [formGroup]="form9Group" (ngSubmit)="onSubmit()">
+    <div class="row col-md-12">
+      <div class="title-bar col-md-12">
+        Só faltam os dados para depósito do empréstimo.
+      </div>
+    </div>
+    <!---------------------LINE1---------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Banco onde deseja receber seu empréstimo, se aprovado:</label>
+        <select class="form-control" [(ngModel)]="bank" formControlName="bankCtl"
+          [ngClass]="(bankCtl.invalid && (bankCtl.dirty || bankCtl.touched || submitted))?'with-error':''">
+          <option *ngFor="let item of bankArr" [disabled]="item==='Selecione'" [ngValue]="item">
+            {{item | translationPipe}}
+          </option>
+        </select>
+        <mat-error *ngIf="bankCtl.invalid && (bankCtl.dirty || bankCtl.touched || submitted)">
+          <strong>Valor obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE2--------------------------------->
+    <div>
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row"> Tipo de conta </label>
+      </div>
+      <div class="row col-md-12" style="margin-top:10px" *ngFor="let item of sliceTypeArr; let i = index ">
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="accountType == i*2?'select-button':''" (click)="accountType = i*2" tabindex="1">
+            {{item[0] | translationPipe}}
+          </button>
+          <mat-error *ngIf="accountType == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6" *ngIf="item.length == 2">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="accountType == i*2+1?'select-button':''" (click)="accountType = i*2+1" tabindex="1">
+            {{item[1] | translationPipe}}
+          </button>
+        </div>
+        <input type="hidden" [(ngModel)]="accountType" formControlName="accountTypeCtl">
+      </div>
+    </div>
+
+    <!----------------------LINE3--------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Agência (sem dígito) </label>
+      </div>
+      <div class="col-md-5">
+        <input class="form-control" type="text" autocomplete="off" formControlName="agencyCtl" mask="0000"
+          [(ngModel)]="agency"
+          [ngClass]="(agencyCtl.invalid && (agencyCtl.dirty || agencyCtl.touched || submitted))?'with-error':''">
+        <mat-error *ngIf="agencyCtl.invalid && (agencyCtl.dirty || agencyCtl.touched || submitted)">
+          <strong>Valor obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE4-------------------------------->
+    <div class="row col-md-12">
+      <div class="col-md-5">
+        <label class="gray font-sm simple-row">Conta </label>
+        <input class="form-control" type="text" autocomplete="off" formControlName="accountCtl" [(ngModel)]="account"
+          mask="00000000"
+          [ngClass]="(accountCtl.invalid && (accountCtl.dirty || accountCtl.touched || submitted))?'with-error':''">
+        <mat-error *ngIf="accountCtl.invalid && (accountCtl.dirty || accountCtl.touched || submitted)">
+          <strong>Valor obrigatório</strong>
+        </mat-error>
+      </div>
+      <div class="col-md-2">
+        <label class="gray font-sm simple-row">Dígito </label>
+        <input class="form-control" type="text" autocomplete="off" formControlName="digitCtl" [(ngModel)]="digit"
+          mask="0" [ngClass]="(digitCtl.invalid && (digitCtl.dirty || digitCtl.touched || submitted))?'with-error':''">
+        <mat-error *ngIf="digitCtl.invalid && (digitCtl.dirty || digitCtl.touched || submitted)">
+          <strong>Valor obrigatório</strong>
+        </mat-error>
+      </div>
+    </div>
+    <!----------------------LINE5--------------------------------->
+    <div>
+      <div class="col-md-12">
+        <label class="gray font-sm simple-row">Há quanto tempo possui essa conta?</label>
+      </div>
+      <div class="row col-md-12" *ngIf="howLongArr.length > 0">
+        <div class="col-md-6">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="howLong == 0?'select-button':''" (click)="howLong = 0" tabindex="1">
+            {{howLongArr[0] | translationPipe}}
+          </button>
+        </div>
+        <div class="col-md-6" *ngIf="howLongArr.length > 1">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="howLong == 1?'select-button':''" (click)="howLong = 1" tabindex="1">
+            {{howLongArr[1] | translationPipe}}
+          </button>
+        </div>
+      </div>
+      <div style="margin-top:10px" class="row col-md-12">
+        <div class="col-md-6" *ngIf="howLongArr.length > 2">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="howLong == 2?'select-button':''" (click)="howLong = 2" tabindex="1">
+            {{howLongArr[2] | translationPipe}}
+          </button>
+          <mat-error *ngIf="howLong == -1 && submitted">
+            <strong>Valor obrigatório</strong>
+          </mat-error>
+        </div>
+        <div class="col-md-6" *ngIf="howLongArr.length == 4">
+          <button type="button" class="full-width button-select round-button button-color "
+            [ngClass]="howLong == 3?'select-button':''" (click)="howLong = 3" tabindex="1">
+            {{howLongArr[3] | translationPipe}}
+          </button>
+        </div>
+      </div>
+      <input type="hidden" [(ngModel)]="howLong" formControlName="howLongCtl">
+    </div>
+    <!-----------------------LINE6-------------------------------->
+
+    <div style="padding-top:20px" class="row col-md-12">
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="button" class="full-width button-select btn-back button-color " tabindex="1"
+          (click)="onGoBack()">
+          VOLTAR
+        </button>
+      </div>
+      <div class="col-md-6">
+        <button id="btnTwoThousand" type="submit" class="full-width button-select button-color btn-continue"
+          tabindex="1">
+          CONTINUAR
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

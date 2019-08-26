@@ -1,0 +1,37 @@
+
+
+.round-button {
+    border: 1px solid #ccc;
+    font-size: 15px;
+    margin-right: 2%;
+    /* width: 15%; */
+    border-radius: 100px;
+    background-color: #fff;
+    /* border: 1px solid #c9d300; */
+    text-align: center;
+    color: #7f9798;
+    cursor: pointer;
+    outline:none
+}
+
+.button-color {
+    height: 40px;
+    font-weight: 700;
+}
+.select-button{
+  background-color: #009180;
+  color: #fff;
+}
+
+.form1{
+  position: absolute;
+  width: 600px;
+  /* height: 800px; */
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  margin: -400px 0 0 -300px;
+  background: #EEF4F4;
+  border-radius: 10px;
+  padding: 40px 20px 40px 20px;
+}

@@ -1,0 +1,117 @@
+<div class="container" style="padding: 20px">
+    <div id="loading" *ngIf="quoteResponse==null"></div>
+    <div *ngIf="quoteResponse!=null">
+        <div class="row col-md-12">
+            <div class="title-bar col-md-12" style="color:darkgreen;padding: 0px">
+                Obrigado {{quoteResponse.quoteRequest.person.fullName}},
+                {{quoteResponse.partnerResponses.length}}
+                empresas estao avaliando o seu credito
+            </div>
+        </div>
+        <div style="">
+            <!-- <div class="card" style="padding:10px" [ngClass]="classArr[statusArr.indexOf(quoteResponse.status)]">
+                <h2>Your offer is {{quoteResponse.status}}</h2>
+            </div> -->
+
+            <div class="row col-md-12" *ngIf="processingResponse.length>0">
+                <br>
+                <h4>SOLICITAÇÕES EM ANÁLISE</h4>
+                <div class="col-md-4" *ngFor="let info of processingResponse;let i = index" style="padding:20px">
+                    <div class="col-md-5" style="height:100%">
+                        <img src="{{info.partnerInfo.logoUrl}}" style="width:100%;height:50px;vertical-align: middle"
+                            class="img-rounded">
+                    </div>
+                    <div class="col-md-7">
+                        <p></p>
+                        <div class="with-bg-size">
+                            <!-- <img src="../assets/images/straight-loader.gif"
+                                class="img-rounded"> -->
+                        </div>
+                        <p style="padding-left:20px">*{{info.responseDate}}</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row col-md-12" *ngIf="approvedResponse.length>0">
+                <br>
+                <h4>PRÉ-APROVADO</h4>
+                <div class="col-md-6" *ngFor="let info of approvedResponse">
+                    <div class="row col-md-12" style="padding-bottom:20px">
+                        <img src="{{info.partnerInfo.logoUrl}}" style="width:150px;height:60px;vertical-align: middle"
+                            class="img-rounded">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p style="margin-bottom:0">VALOR APROVADO</p>
+                            <p style="color:deepskyblue;font-weight:800;font-size: 30px">
+                                {{info.suggestedOffer.principal | currency}}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="margin-bottom:0">VALOR DA PARCELA</p>
+                            <p style="color:deepskyblue;font-weight:800;font-size: 30px">
+                                {{info.suggestedOffer.instalmentNumber}}x
+                                {{info.suggestedOffer.instalmentValue | currency}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:30px">
+                        <p style="margin-left:15px">Validar Data {{validDate |date:"MM/dd/yyyy"}}</p>
+                    </div>
+                    <div class="row" style="padding-right:20px">
+                        <button type="button" class="full-width button-select round-button button-color select-button"
+                            style="padding:10px">
+                            TENHO INTERESSE
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row col-md-12" *ngIf="deniedResponse.length>0">
+                <br>
+                <h4>SEM OFERTA</h4>
+                <div class="col-md-4" *ngFor="let info of deniedResponse;let i = index" style="padding:20px">
+                    <div class="col-md-5" style="height:100%">
+                        <img src="{{info.partnerInfo.logoUrl}}" style="width:100px;height:50px;vertical-align: middle"
+                            class="img-rounded">
+                    </div>
+                    <div class="col-md-7">
+                        <p></p>
+                    </div>
+                    <div class="row">
+                        <p style="margin-left:10px">*{{info.responseDate}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- <mat-grid-list cols="4">
+                <mat-grid-tile *ngFor="let info of quoteResponse.partnerResponses;let i = index" style="background:black;height:80px">
+                    <div style="border-color:black">
+                        asdf
+    
+                    </div>
+                    <mat-card class="example-card" style="padding:10px;margin:20px" [hidden]="!indexArr[i]" [ngClass]="!loading&&indexArr[i]?'fade-in':''">
+                        <mat-card-header>
+                            <h4>
+                                {{info.status}}
+                            </h4>
+                            <p>
+    
+                            </p>
+                        </mat-card-header>
+                        <img src="{{info.partnerInfo.logoUrl}}" style="padding:15px;width:300px;height:150px"
+                            class="img-rounded">
+                        <mat-card-content style="padding:15px">
+                            <p>
+                                {{info.partnerInfo.description}}
+                            </p>
+                        </mat-card-content>
+    
+                    </mat-card>
+                </mat-grid-tile>
+            </mat-grid-list> -->
+        </div>
+    </div>
+
+</div>

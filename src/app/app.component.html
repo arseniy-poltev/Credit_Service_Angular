@@ -1,0 +1,65 @@
+<header>
+    <div class="container">
+        <a class="logo" href="/"></a>
+    </div>
+</header>
+<main>
+    <section class="container wrapper-page">
+        <div id="loading" *ngIf="loading"></div>
+        <router-outlet *ngIf="!loading">
+        </router-outlet>
+    </section>
+</main>
+
+
+<!-- <footer class="footer">
+    <div class="footer-header">
+        <div class="container">
+
+            <ul class="menu list-inline text-center">
+                <li class="item">
+                    <a class="link" ui-sref="home({'#': 'home'})" scroll-to="#home" offset="60" container="html, body"
+                        href="/#home">Home</a>
+                </li>
+                <li class="item">
+                    <a class="link" ui-sref="home({'#': 'quem-somos'})" scroll-to="#quem-somos" offset="60"
+                        container="html, body" href="/#quem-somos">Quem Somos</a>
+                </li>
+                <li class="item">
+                    <a class="link" ui-sref="home({'#': 'como-funciona'})" scroll-to="#como-funciona" offset="60"
+                        container="html, body" href="/#como-funciona">Como Funciona</a>
+                </li>
+                <li class="item">
+                    <a class="link" ui-sref="faq" title="Ir para a página fale conosco" href="/faq">Dúvidas</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="//blog.acordocerto.com.br" target="_blank">Blog</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="//static.acordocerto.com.br/docs/termos-de-uso.pdf" target="_blank">Termos de
+                        Uso</a>
+                </li>
+                <li class="item">
+                    <a class="link" href="//static.acordocerto.com.br/docs/politica-privacidade.pdf"
+                        target="_blank">Política de Privacidade</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-copy">
+        <div class="container">
+            <p class="copyright ng-binding">© Copyright 2019 Acordo Certo, todos os direitos reservados - CNPJ
+                08.702.298/0001-93 - Rua Sete de Abril, 97, República - São Paulo/SP</p>
+        </div>
+    </div>
+    <div class="footer-security">
+        <div class="container">
+            <a href="https://www.google.com/transparencyreport/safebrowsing/diagnostic/?hl=pt-br#url=acordocerto.com.br"
+                title="Google Safe Browsing" target="_blank">
+                <img class="image" ng-src="//static.acordocerto.com.br/ac/assets/imgs/google-safe-browsing_white.png"
+                    alt="Google Safe Browsing"
+                    src="//static.acordocerto.com.br/ac/assets/imgs/google-safe-browsing_white.png">
+            </a>
+        </div>
+    </div>
+</footer> -->
